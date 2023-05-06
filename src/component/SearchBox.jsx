@@ -14,7 +14,7 @@ export default function SearchBox() {
   console.log(result);
   return (
     <div className="flex flex-col w-72 m-auto mt-10">
-      <div className="flex">
+      <div className="flex rounded-md overflow-hidden">
         <input
           className="p-3 flex-grow"
           type="text"
@@ -23,7 +23,8 @@ export default function SearchBox() {
         />
         <button className="bg-blue-600 text-white p-3">검색</button>
       </div>
-      <ul className="bg-white mt-2 ">
+      <ul className="bg-white mt-2 rounded-md p-4">
+        <h3 className="text-start text-gray-500">추천검색어</h3>
         {result?.map((data) => (
           <ResultList key={data.id} data={data} />
         ))}
