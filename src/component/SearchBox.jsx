@@ -11,7 +11,7 @@ export default function SearchBox() {
     const res = await searchApi.searchKeyword(e.target.value);
     setResult(res.data);
   };
-  console.log(result);
+
   return (
     <div className="flex flex-col w-72 m-auto mt-10">
       <div className="flex rounded-md overflow-hidden">
@@ -23,12 +23,7 @@ export default function SearchBox() {
         />
         <button className="bg-blue-600 text-white p-3">검색</button>
       </div>
-      <ul className="bg-white mt-2 rounded-md p-4">
-        <h3 className="text-start text-gray-500">추천검색어</h3>
-        {result?.map((data) => (
-          <ResultList key={data.id} data={data} />
-        ))}
-      </ul>
+      {searchText.length > 0 ? <ResultList result={result} /> : null}
     </div>
   );
 }
