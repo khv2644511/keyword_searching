@@ -7,7 +7,6 @@ export async function setCachedData(cacheName, url, response) {
     },
   };
   const clonedResponse = new Response(JSON.stringify(response), init);
-  console.log("clonedResponse", clonedResponse);
   await cacheStorage.put(url, clonedResponse);
 
   return;

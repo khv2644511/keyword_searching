@@ -19,6 +19,7 @@ const searchKeyword = async (keyword) => {
 
     await setCachedData(cacheName, url, response);
 
+    console.info("calling api");
     return response;
   } catch (error) {
     if (error instanceof AxiosError) {
