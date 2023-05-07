@@ -1,31 +1,26 @@
 import React, { useState } from "react";
 import searchApi from "../api/seachAPI";
 import ResultList from "./ResultList";
+import { debounce } from "../utils/debounce";
 
 export default function SearchBox() {
   const [searchText, setSearchText] = useState("");
   const [result, setResult] = useState([]);
-  const [timer, setTimer] = useState(0); // 디바운싱 타이머
 
   // fix: 검색창에 입력 텍스트 없을 때 호출 막아야함
-  // fix: 디바운스 함수 분리 필요
   const handleChange = (e) => {
     setSearchText(e.target.value);
-
     if (searchText.length > 0) {
-      if (timer) {
-        console.log("clear timer");
-        clearTimeout(timer);
-      }
-      const newTimer = setTimeout(async () => {
-        try {
-          let res = await searchApi.searchKeyword(e.target.value);
-          setResult(res.data);
-        } catch (e) {
-          console.error("error", e);
-        }
-      }, 300);
-      setTimer(newTimer);
+      debounce(() => handleSearch(e.target.value), 300)();
+    }
+  };
+
+  const handleSearch = async (searchValue) => {
+    try {
+      const res = await searchApi.searchKeyword(searchValue);
+      setResult(res.data);
+    } catch (e) {
+      console.error("error", e);
     }
   };
 
