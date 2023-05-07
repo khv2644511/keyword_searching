@@ -9,16 +9,15 @@ export default function SearchBox() {
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
-    if (e.target.value === 0) return;
-    if (e.target.value.length > 0) {
-      debounce(() => handleSearch(e.target.value), 300)();
-    }
+    debounce(() => handleSearch(e.target.value), 300)();
   };
 
   const handleSearch = async (searchValue) => {
     try {
-      const res = await searchApi.searchKeyword(searchValue);
-      setResult(res.data);
+      if (searchValue.length !== 0) {
+        const res = await searchApi.searchKeyword(searchValue);
+        setResult(res.data);
+      }
     } catch (e) {
       console.error("error", e);
     }
