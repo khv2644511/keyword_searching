@@ -6,6 +6,7 @@ export default function SearchBox() {
   const [searchText, setSearchText] = useState("");
   const [result, setResult] = useState([]);
 
+  // fix: 검색창에 입력 텍스트 없을 때 호출 막아야함
   const handleChange = async (e) => {
     setSearchText(e.target.value);
     if (searchText.length > 0) {
