@@ -8,8 +8,10 @@ export default function SearchBox() {
 
   const handleChange = async (e) => {
     setSearchText(e.target.value);
-    const res = await searchApi.searchKeyword(e.target.value);
-    setResult(res.data);
+    if (searchText.length > 0) {
+      const res = await searchApi.searchKeyword(e.target.value);
+      setResult(res.data);
+    }
   };
 
   return (
