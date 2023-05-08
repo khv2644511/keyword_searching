@@ -9,7 +9,7 @@ export default function SearchBox() {
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
-    debounce(() => handleSearch(e.target.value), 300)();
+    debounce(() => handleSearch(e.target.value), 400)();
   };
 
   const handleSearch = async (searchValue) => {
@@ -31,6 +31,7 @@ export default function SearchBox() {
           type="text"
           value={searchText}
           onChange={handleChange}
+          autoFocus
         />
         <button className="bg-blue-600 text-white p-3">검색</button>
       </div>
