@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import searchApi from "../api/seachAPI";
 import ResultList from "./ResultList";
 import { debounce } from "../utils/debounce";
+import { maxResult } from "../constant/maxResult";
 
 export default function SearchBox() {
   const [searchText, setSearchText] = useState("");
@@ -16,7 +17,7 @@ export default function SearchBox() {
     try {
       if (searchValue.length !== 0) {
         const res = await searchApi.searchKeyword(searchValue);
-        setResult(res.data);
+        setResult(res.data.splice(0, maxResult));
       }
     } catch (e) {
       console.error("error", e);
@@ -35,7 +36,9 @@ export default function SearchBox() {
         />
         <button className="bg-blue-600 text-white p-3">검색</button>
       </div>
-      {searchText.length > 0 ? <ResultList result={result} /> : null}
+      {searchText.length > 0 ? (
+        <ResultList result={result} setResult={setResult} />
+      ) : null}
     </div>
   );
 }
