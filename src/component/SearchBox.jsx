@@ -4,15 +4,17 @@ import ResultList from "./ResultList";
 import { debounce } from "../utils/debounce";
 import { maxResult } from "../constant/maxResult";
 
-// fix: input 에서 아래 방향키 눌렀을 때 추천 검색어로 포커스 이동되지 않음
 export default function SearchBox() {
+  const INITIAL_FOCUS_INDEX = 0;
   const [searchText, setSearchText] = useState("");
   const [result, setResult] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(INITIAL_FOCUS_INDEX);
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
-    debounce(() => handleSearch(e.target.value), 400)();
+    debounce(() => {
+      handleSearch(e.target.value);
+    }, 400)();
   };
 
   const handleSearch = async (searchValue) => {
@@ -26,10 +28,20 @@ export default function SearchBox() {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyArrow = (e) => {
+    const lastIndex = result.length - 1;
+
     if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setSelectedIndex(0);
+      if (e.nativeEvent.isComposing) return;
+      selectedIndex === lastIndex
+        ? setSelectedIndex(0)
+        : setSelectedIndex((prev) => prev + 1);
+    }
+    if (e.key === "ArrowUp") {
+      if (e.nativeEvent.isComposing) return;
+      selectedIndex === 0
+        ? setSelectedIndex(lastIndex)
+        : setSelectedIndex((prev) => prev - 1);
     }
   };
 
@@ -42,16 +54,12 @@ export default function SearchBox() {
           value={searchText}
           onChange={handleChange}
           autoFocus
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyArrow}
         />
         <button className="bg-blue-600 text-white p-3">검색</button>
       </div>
       {searchText.length > 0 ? (
-        <ResultList
-          result={result}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
-        />
+        <ResultList result={result} selectedIndex={selectedIndex} />
       ) : null}
     </div>
   );
